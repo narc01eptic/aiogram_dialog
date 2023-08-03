@@ -13,7 +13,7 @@ from .context import Context
 from .events import DialogUpdateEvent, ChatEvent
 from .stack import DEFAULT_STACK_ID
 from .storage import StorageProxy
-from ..exceptions import InvalidStackIdError, OutdatedIntent, UnknownIntent
+from ..exceptions import InvalidStackIdError, OutdatedIntent, UnknownIntent, UnknownState
 from ..utils import remove_indent_id, get_chat
 
 STORAGE_KEY = "aiogd_storage_proxy"
@@ -196,7 +196,7 @@ class IntentMiddleware(BaseMiddleware):
         else:
             try:
                 context = await proxy.load_context(stack.last_intent_id())
-            except UnknownIntent:
+            except (UnknownIntent, UnknownState):
                 context = None
         data[STACK_KEY] = stack
         data[CONTEXT_KEY] = context
